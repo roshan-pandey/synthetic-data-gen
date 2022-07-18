@@ -37,4 +37,4 @@ def count_encoding(df):
 
 merged_df_ce = count_encoding(merged_df)
 
-merged_df.to_csv('data/long_individual_merged.csv')
+merged_df_ce.to_csv('data/long_individual_merged.csv', index= False)
