@@ -37,7 +37,7 @@ affiliation:
     - name: Newcastle University
       department: School of Computing
       location: Newcastle Upon Tyne, United Kingdom
- #     email: ece@datech.edu
+     email: r.k.pandey2@newcastle.ac.uk
       mark: 1
       author:
         - name: Roshan Pandey
@@ -46,10 +46,10 @@ affiliation:
       mark: 2
       author:
         - name: Nicola Palmarini
-          email: homer@thesimpsons.com
-    - name: 
-      location: Newcastle Upon Tyne, United Kingdom
-      other: "Telephone: (800) 555--1212, Fax: (888) 555--1212"
+          email: Nic.Palmarini@newcastle.ac.uk
+    # - name: 
+      # location: Newcastle Upon Tyne, United Kingdom
+      # other: "Telephone: (800) 555--1212, Fax: (888) 555--1212"
     #   mark: 3
     #   author:
     #     - name: Montgomery Scott

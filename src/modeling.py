@@ -5,13 +5,15 @@ from sklearn.ensemble import RandomForestRegressor
 import pickle
 from sdv import SDV
 from sdv import Metadata
-
+import numpy as np
 
 
 df = pd.read_csv('data/long_individual_merged_test.csv')
 
 def regression_train(df, n_estimator):
 
+    df = df[df.select_dtypes(include=[np.number]).ge(0).all(1)]
+    print(df.shape)
     y = df.iloc[:,-1].values
     X = df.drop('eptime', axis=1)
 
@@ -20,10 +22,10 @@ def regression_train(df, n_estimator):
     X_train = normalize(X_train,norm='l2')
     X_test = normalize(X_test,norm='l2')
 
-    regressor = RandomForestRegressor(n_estimators = n_estimator, random_state = 42)
-    regressor.fit(X_train, y_train)
+    rf_regressor = RandomForestRegressor(n_estimators = n_estimator, random_state = 42)
+    rf_regressor.fit(X_train, y_train)
 
-    return regressor
+    return rf_regressor, 
 
 
 regressor = regression_train(df, 50)
