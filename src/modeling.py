@@ -12,7 +12,7 @@ df = pd.read_csv('data/long_individual_merged_test.csv')
 
 def regression_train(df, n_estimator):
 
-    df = df[df.select_dtypes(include=[np.number]).ge(0).all(1)]
+    # df = df[df.select_dtypes(include=[np.number]).ge(0).all(1)]
     print(df.shape)
     y = df.iloc[:,-1].values
     X = df.drop('eptime', axis=1)
@@ -25,7 +25,7 @@ def regression_train(df, n_estimator):
     rf_regressor = RandomForestRegressor(n_estimators = n_estimator, random_state = 42)
     rf_regressor.fit(X_train, y_train)
 
-    return rf_regressor, 
+    return rf_regressor
 
 
 regressor = regression_train(df, 50)
@@ -57,7 +57,9 @@ generated_data = data_gen(df)
 
 generated_data['df'].to_csv('data/generated_data_test.csv', index = False)
 
-gen_data = pd.read_csv('data/generated_data_test.csv')
+# gen_data = pd.read_csv('data/generated_data_test.csv')
+gen_data = pd.read_csv('data/long_individual_merged_short.csv')
 
+print(gen_data.shape)
 synth_data_model = regression_train(gen_data, 50)
 pickle.dump(regressor, open("models/gen_test_train_new.pkl", 'wb'))
