@@ -105,29 +105,20 @@ ind_gen = pd.read_csv('data/ind_gen.csv')
 
 merged_df = merge_data(ind_gen, long_gen)
 
-regressor = regression_train(merged_df, 50)
-
-pickle.dump(regressor, open("models/real_test_train_new.pkl", 'wb'))
+regressor = regression_train(df, 50)
+pickle.dump(regressor, open("models/real_spss.pkl", 'wb'))
 
 
 # load_lr_model =pickle.load(open("models/real_test_train.sav", 'rb'))
 # y_load_predit=load_lr_model.predict(X_test)
 
-
-
-
-
-
-
-
-generated_data['df'].to_csv('data/generated_data_test.csv', index = False)
+# generated_data['df'].to_csv('data/generated_data_test.csv', index = False)
 
 # gen_data = pd.read_csv('data/generated_data_test.csv')
-gen_data = pd.read_csv('data/long_individual_merged_short.csv')
+# gen_data = pd.read_csv('data/long_individual_merged_short.csv')
 
-print(gen_data.shape)
-synth_data_model = regression_train(gen_data, 50)
-pickle.dump(regressor, open("models/gen_test_train_new.pkl", 'wb'))
+synth_data_model = regression_train(merged_df, 50)
+pickle.dump(regressor, open("models/gen_sep_spss.pkl", 'wb'))
 
 
 ############################################################################### Generating Merged Data ######################################################################################
