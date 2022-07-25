@@ -19,8 +19,7 @@ ind_cols = ['serial', 'pnum', 'DMSex', 'WorkSta', 'DVAge', 'Income', 'Sector', '
 ind_df = individual_pdf.loc[:, ind_cols]
 
 merged_df = ind_df.merge(long_df, on=['serial', 'pnum'], how='inner')
-# merged_df.drop(['serial', 'pnum'], axis=1, inplace=True)
-
+merged_df = merged_df.drop(['serial', 'pnum'], axis = 1)
 merged_df = merged_df.dropna()
 
 def count_encoding(df):
@@ -39,13 +38,25 @@ def count_encoding(df):
 
 merged_df_ce = count_encoding(merged_df)
 
-merged_df_ce['serial'] = merged_df_ce['serial'].astype('int').astype('str')
-merged_df_ce['pnum'] = merged_df_ce['pnum'].astype('int').astype('str')
-merged_df_ce['uid'] = merged_df_ce['serial'] + merged_df_ce['pnum']
-merged_df_ce = merged_df_ce.drop(['serial', 'pnum'], axis = 1)
-
-
 merged_df_ce.to_csv('data/ce_merged.csv', index= False)
+
+long_df_ce = count_encoding(long_df)
+ind_df_ce = count_encoding(ind_df)
+
+long_df_ce['serial'] = long_df_ce['serial'].astype('int').astype('str')
+long_df_ce['pnum'] = long_df_ce['pnum'].astype('int').astype('str')
+
+ind_df_ce['serial'] = ind_df_ce['serial'].astype('int').astype('str')
+ind_df_ce['pnum'] = ind_df_ce['pnum'].astype('int').astype('str')
+
+long_df_ce['uid'] = long_df_ce['serial'] + long_df_ce['pnum']
+ind_df_ce['uid'] = ind_df_ce['serial'] + ind_df_ce['pnum']
+
+long_df_ce = long_df_ce.drop(['serial', 'pnum'], axis = 1)
+ind_df_ce = ind_df_ce.drop(['serial', 'pnum'], axis = 1)
+
+long_df_ce.to_csv('data/long_ce.csv', index= False)
+ind_df_ce.to_csv('data/ind_ce.csv', index= False)
 
 ############################################################################### spss encoding ######################################################################################
 
@@ -62,20 +73,10 @@ def spss_encoder():
     ind_df = individual_df.loc[:, ind_cols]
     ind_df = ind_df.dropna()
 
-    long_df['serial'] = long_df['serial'].astype('int').astype('str')
-    long_df['pnum'] = long_df['pnum'].astype('int').astype('str')
+    merged_df = ind_df.merge(long_df, on=['serial', 'pnum'], how='inner')
+    merged_df = merged_df.drop(['serial', 'pnum'], axis = 1)
+    merged_df = merged_df.dropna()
 
-    ind_df['serial'] = ind_df['serial'].astype('int').astype('str')
-    ind_df['pnum'] = ind_df['pnum'].astype('int').astype('str')
-
-    long_df['uid'] = long_df['serial'] + long_df['pnum']
-    ind_df['uid'] = ind_df['serial'] + ind_df['pnum']
-
-    long_df = long_df.drop(['serial', 'pnum'], axis = 1)
-    ind_df = ind_df.drop(['serial', 'pnum'], axis = 1)
-
-    merged_df = ind_df.merge(long_df, on='uid', how='inner')
-    merged_df.drop(['uid'], axis=1, inplace=True)
     return merged_df
 
 spss_merged_df = spss_encoder()
