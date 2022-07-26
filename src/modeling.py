@@ -5,14 +5,13 @@ from sklearn.ensemble import RandomForestRegressor
 import pickle
 from sdv import SDV
 from sdv import Metadata
-import numpy as np
 import pyreadstat as prs
 
 
 ############################################################################### UTILITY FUNCTIONS ######################################################################################
 
 def data_load_and_col_select():
-    df = pd.read_csv('data/long_individual_merged_left.csv')
+    df = pd.read_csv('data/spss_merged.csv')
 
     long_df, long_meta = prs.read_sav('data/uktus15_diary_ep_long.sav', encoding="latin1")
     individual_df, individual_meta = prs.read_sav('data/uktus15_individual.sav', encoding="latin1")
