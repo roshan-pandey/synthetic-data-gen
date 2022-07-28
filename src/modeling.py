@@ -76,51 +76,44 @@ def merge_data(left, right):
 
 df, long_df, ind_df = data_load_and_col_select()
 
-metadata = Metadata()
-table = {'long': long_df, 'ind': ind_df}
+metadata_spss = Metadata()
+table_spss = {'long': long_df, 'ind': ind_df}
 
-metadata.add_table(
+metadata_spss.add_table(
     name = 'long',
-    data = table['long'],
+    data = table_spss['long'],
     primary_key='uid'
 )
 
-metadata.add_table(
+metadata_spss.add_table(
     name = 'ind',
-    data = table['ind'],
+    data = table_spss['ind'],
     primary_key='uid'
 )
 
 file_name = 'sdv-sep'
-train_gen(metadata, table, file_name)
-generated_data = data_gen(file_name)
+train_gen(metadata_spss, table_spss, file_name)
+generated_data_spss = data_gen(file_name)
 
-generated_data['long'].to_csv('data/long_gen.csv', index = False)
-generated_data['ind'].to_csv('data/ind_gen.csv', index = False)
+generated_data_spss['long'].to_csv('data/long_gen.csv', index = False)
+generated_data_spss['ind'].to_csv('data/ind_gen.csv', index = False)
 
 
 long_gen = pd.read_csv('data/long_gen.csv')
 ind_gen = pd.read_csv('data/ind_gen.csv')
 
 
-merged_df = merge_data(ind_gen, long_gen)
+merged_df_spss = merge_data(ind_gen, long_gen)
+merged_df_spss.to_csv('data/gen_spss_sep.csv', index = False)
 
-regressor = regression_train(df, 50)
-pickle.dump(regressor, open("models/real_spss.pkl", 'wb'))
-
-
-# load_lr_model =pickle.load(open("models/real_test_train.sav", 'rb'))
-# y_load_predit=load_lr_model.predict(X_test)
-
-# generated_data['df'].to_csv('data/generated_data_test.csv', index = False)
-
-# gen_data = pd.read_csv('data/generated_data_test.csv')
-# gen_data = pd.read_csv('data/long_individual_merged_short.csv')
-
-synth_data_model = regression_train(merged_df, 50)
-pickle.dump(regressor, open("models/gen_sep_spss.pkl", 'wb'))
+gen_sep_spss = regression_train(merged_df_spss, 50)
+pickle.dump(gen_sep_spss, open("models/gen_sep_spss.pkl", 'wb'))
 
 
+regressor_spss = regression_train(df, 50)
+pickle.dump(regressor_spss, open("models/real_spss.pkl", 'wb'))
+
+#################################################### CE #################################################
 long_ce_df = pd.read_csv('data/long_ce.csv')
 ind_ce_df = pd.read_csv('data/ind_ce.csv')
 
@@ -129,35 +122,38 @@ merged_ce_df = merge_data(ind_ce_df, long_ce_df)
 regressor = regression_train(merged_ce_df, 50)
 pickle.dump(regressor, open("models/real_ce.pkl", 'wb'))
 
-metadata = Metadata()
-table = {'long': long_ce_df, 'ind': ind_ce_df}
+metadata_ce_sep = Metadata()
+table_ce_sep = {'long': long_ce_df, 'ind': ind_ce_df}
 
-metadata.add_table(
+metadata_ce_sep.add_table(
     name = 'long',
-    data = table['long'],
+    data = table_ce_sep['long'],
     primary_key='uid'
 )
 
-metadata.add_table(
+metadata_ce_sep.add_table(
     name = 'ind',
-    data = table['ind'],
+    data = table_ce_sep['ind'],
     primary_key='uid'
 )
 
 file_name = 'sdv-sep_ce'
-train_gen(metadata, table, file_name)
-generated_data = data_gen(file_name)
+train_gen(metadata_ce_sep, table_ce_sep, file_name)
+generated_data_ce = data_gen(file_name)
 
-generated_data['long'].to_csv('data/long_gen_ce.csv', index = False)
-generated_data['ind'].to_csv('data/ind_gen_ce.csv', index = False)
+generated_data_ce['long'].to_csv('data/long_gen_ce.csv', index = False)
+generated_data_ce['ind'].to_csv('data/ind_gen_ce.csv', index = False)
 
 long_gen_ce = pd.read_csv('data/long_gen_ce.csv')
 ind_gen_ce = pd.read_csv('data/ind_gen_ce.csv')
 
-merged_df = merge_data(ind_gen_ce, long_gen_ce)
+merged_df_ce = merge_data(ind_gen_ce, long_gen_ce)
 
-regressor = regression_train(merged_df, 50)
-pickle.dump(regressor, open("models/gen_sep_ce_model.pkl", 'wb'))
+merged_df_ce.to_csv('data/gen_ce_sep.csv', index = False)
+
+gen_sep_ce_model = regression_train(merged_df_ce, 50)
+pickle.dump(gen_sep_ce_model, open("models/gen_sep_ce_model.pkl", 'wb'))
+
 ############################################################################### Generating Merged Data ######################################################################################
 
 ce_merged = pd.read_csv('data\ce_merged.csv')
@@ -172,12 +168,12 @@ metadata_ce.add_table(
 
 file_name = 'sdv-ce-merged'
 train_gen(metadata_ce, table_ce, file_name)
-generated_data = data_gen(file_name)
+generated_data_ce_merged = data_gen(file_name)
 
-generated_data['ce'].to_csv('data/gen_ce.csv')
+generated_data_ce_merged['ce'].to_csv('data/gen_ce.csv', index = False)
 
-regressor = regression_train(generated_data['ce'], 50)
-pickle.dump(regressor, open("models/gen_ce_model.pkl", 'wb'))
+regressor_ce_merged = regression_train(generated_data_ce_merged['ce'], 50)
+pickle.dump(regressor_ce_merged, open("models/gen_ce_model.pkl", 'wb'))
 
 
 metadata_spss = Metadata()
@@ -189,10 +185,10 @@ metadata_spss.add_table(
 
 file_name = 'sdv-spss-merged'
 train_gen(metadata_spss, table_spss, file_name)
-generated_data = data_gen(file_name)
+generated_data_spss_merged = data_gen(file_name)
 
 
-generated_data['spss'].to_csv('data/gen_spss.csv')
-regressor = regression_train(generated_data['spss'], 50)
-pickle.dump(regressor, open("models/gen_spss_model.pkl", 'wb'))
+generated_data_spss_merged['spss'].to_csv('data/gen_spss.csv', index = False)
+regressor_spss_merged = regression_train(generated_data_spss_merged['spss'], 50)
+pickle.dump(regressor_spss_merged, open("models/gen_spss_model.pkl", 'wb'))
 
