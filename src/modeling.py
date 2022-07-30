@@ -6,8 +6,7 @@ import pickle
 from sdv import SDV
 from sdv import Metadata
 import pyreadstat as prs
-
-
+from ctgan import CTGANSynthesizer
 ############################################################################### UTILITY FUNCTIONS ######################################################################################
 
 def data_load_and_col_select():
@@ -114,6 +113,7 @@ regressor_spss = regression_train(df, 50)
 pickle.dump(regressor_spss, open("models/real_spss.pkl", 'wb'))
 
 #################################################### CE #################################################
+
 long_ce_df = pd.read_csv('data/long_ce.csv')
 ind_ce_df = pd.read_csv('data/ind_ce.csv')
 
@@ -192,3 +192,9 @@ generated_data_spss_merged['spss'].to_csv('data/gen_spss.csv', index = False)
 regressor_spss_merged = regression_train(generated_data_spss_merged['spss'], 50)
 pickle.dump(regressor_spss_merged, open("models/gen_spss_model.pkl", 'wb'))
 
+#################################################################################### CTGAN ######################################################################################
+ctgan = CTGANSynthesizer(epochs=10)
+ctgan.fit(df, df.columns)
+
+# Synthetic copy
+samples = ctgan.sample(1000)
