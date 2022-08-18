@@ -6,7 +6,7 @@ import pickle
 from sdv import SDV
 from sdv import Metadata
 import pyreadstat as prs
-from ctgan import CTGANSynthesizer
+from sdv.tabular import CTGAN
 ############################################################################### UTILITY FUNCTIONS ######################################################################################
 
 def data_load_and_col_select():
@@ -47,8 +47,8 @@ def regression_train(df, n_estimator):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
-    X_train = normalize(X_train,norm='l2')
-    X_test = normalize(X_test,norm='l2')
+    X_train = normalize(X_train, norm='l2')
+    X_test = normalize(X_test, norm='l2')
 
     rf_regressor = RandomForestRegressor(n_estimators = n_estimator, random_state = 42)
     rf_regressor.fit(X_train, y_train)
@@ -193,8 +193,11 @@ regressor_spss_merged = regression_train(generated_data_spss_merged['spss'], 50)
 pickle.dump(regressor_spss_merged, open("models/gen_spss_model.pkl", 'wb'))
 
 #################################################################################### CTGAN ######################################################################################
-ctgan = CTGANSynthesizer(epochs=10)
-ctgan.fit(df, df.columns)
 
-# Synthetic copy
-samples = ctgan.sample(1000)
+model = CTGAN()
+spss_merged = spss_merged.drop_duplicates()
+model.fit(spss_merged)
+model.save('models/CTGAN_spss_merged.pkl')
+loaded = CTGAN.load('models/CTGAN_spss_merged.pkl')
+synth_spss_CTGAN = loaded.sample(num_rows=5000)
+synth_spss_CTGAN.to_csv('data/synth_spss_CTGAN.csv')
