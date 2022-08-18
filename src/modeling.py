@@ -191,13 +191,3 @@ generated_data_spss_merged = data_gen(file_name)
 generated_data_spss_merged['spss'].to_csv('data/gen_spss.csv', index = False)
 regressor_spss_merged = regression_train(generated_data_spss_merged['spss'], 50)
 pickle.dump(regressor_spss_merged, open("models/gen_spss_model.pkl", 'wb'))
-
-#################################################################################### CTGAN ######################################################################################
-
-model = CTGAN()
-spss_merged = spss_merged.drop_duplicates()
-model.fit(spss_merged)
-model.save('models/CTGAN_spss_merged.pkl')
-loaded = CTGAN.load('models/CTGAN_spss_merged.pkl')
-synth_spss_CTGAN = loaded.sample(num_rows=5000)
-synth_spss_CTGAN.to_csv('data/synth_spss_CTGAN.csv')
