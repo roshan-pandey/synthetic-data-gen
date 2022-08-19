@@ -14,7 +14,7 @@ Apart from privacy issues, synthetic data generation solves the problem of havin
 
 ## 3. Steps to execute this Project.
 NOTE: Running the whole project might take extended period of time. Training time also depends on your systems computation capabilities.
-1. Download/fork/clone the project by clicking [here](https://github.com/roshan-pandey/synthetic-data-gen) and place all **the data files** in ./data/ directory. (Data can downloaded [here](https://ukdataservice.ac.uk/) if you are a member.)
+1. Download/fork/clone the project by clicking [here](https://github.com/roshan-pandey/synthetic-data-gen) and place all **the data files** in ./data/ directory. (Data can be downloaded [here](https://ukdataservice.ac.uk/) if you are a member.)
 2. Go to project folder and use requirements.txt file to install the packages required to run this project. Run this command "pip install -r .\requirements.txt"
 3. Go to ./src/summary.ipynb and do run all. This will perform all the data manipulation and training of models and save the newly created files in ./data/ directory and models in ./models/ directory.
 4. To perform EDA, run all ./src/EDA.ipynb. It will generate all the reports/plots in html format in ./reports/ directory.
