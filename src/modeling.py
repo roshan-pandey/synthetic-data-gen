@@ -1,3 +1,14 @@
+#############################################################################################################################################################################################################
+#                                                                                  F I L E   D E S C R I P T I O N                                                                                          #
+#############################################################################################################################################################################################################
+#                                                                                                                                                                                                           #
+# This file contains the code related to Data manipulation such as dividing data into test and train, training Synthetic Data Vault to generated synthetic data on various configurations of the data,      #
+# training Random Forest regression model to pretict the amount of time people are spending on a certain task in a point of time in a day and saving those models for future use. We are also generating    #
+# synthetic data in various configurations and saving them in CSV format to analyse them.                                                                                                                   #
+#############################################################################################################################################################################################################
+
+
+# Importing relvant packages...
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import normalize
@@ -9,6 +20,7 @@ import pyreadstat as prs
 from sdv.tabular import CTGAN
 ############################################################################### UTILITY FUNCTIONS ######################################################################################
 
+# load data and use only required features...
 def data_load_and_col_select():
     df = pd.read_csv('data/spss_merged.csv')
 
@@ -38,6 +50,7 @@ def data_load_and_col_select():
 
     return df, long_df, ind_df
 
+# training regression model to predict time spent on certain task...
 def regression_train(df, n_estimator):
 
     # df = df[df.select_dtypes(include=[np.number]).ge(0).all(1)]
@@ -55,26 +68,31 @@ def regression_train(df, n_estimator):
 
     return rf_regressor
 
+# Training SDV to generate synthetic data...
 def train_gen(metadata, tables, name):
     sdv = SDV()
     sdv.fit(metadata, tables)
     sdv.save(f'models/{name}.pkl')
 
+# Generating data...
 def data_gen(name):
     sdv = SDV.load(f'models/{name}.pkl')
     samples = sdv.sample()
     return samples
 
+# Merge two tables...
 def merge_data(left, right):
     merged_df = left.merge(right, on='uid', how='inner')
     merged_df.drop(['uid'], axis=1, inplace=True)
     return merged_df
 
 
-############################################################################### Generating Data Separately ######################################################################################
+######################################################### Generating Activity log and individual info tables Separately ######################################################################
 
 df, long_df, ind_df = data_load_and_col_select()
 
+
+# Metadata is placeholder where we specify the details of our tables such as tables name, primary keys, foreign keys etc...
 metadata_spss = Metadata()
 table_spss = {'long': long_df, 'ind': ind_df}
 
@@ -112,7 +130,6 @@ pickle.dump(gen_sep_spss, open("models/gen_sep_spss.pkl", 'wb'))
 regressor_spss = regression_train(df, 50)
 pickle.dump(regressor_spss, open("models/real_spss.pkl", 'wb'))
 
-#################################################### CE #################################################
 
 long_ce_df = pd.read_csv('data/long_ce.csv')
 ind_ce_df = pd.read_csv('data/ind_ce.csv')

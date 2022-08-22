@@ -1,3 +1,12 @@
+#############################################################################################################################################################################################################
+#                                                                                  F I L E   D E S C R I P T I O N                                                                                          #
+#############################################################################################################################################################################################################
+#                                                                                                                                                                                                           #
+# This file contains the code related to Data manipulation such as selecting relevant columns, merging data and encoding categorical data and saving them in csv format.                                    # 
+#############################################################################################################################################################################################################
+
+
+# Importing relvant packages...
 import pandas as pd
 import category_encoders as ce
 import pyreadstat as prs
@@ -19,6 +28,8 @@ merged_df = ind_df.merge(long_df, on=['serial', 'pnum'], how='inner')
 merged_df = merged_df.drop(['serial', 'pnum'], axis = 1)
 merged_df = merged_df.dropna()
 
+
+# count encode all the categorical features...
 def count_encoding(df):
     data = pd.DataFrame()
     for i in df.columns:
